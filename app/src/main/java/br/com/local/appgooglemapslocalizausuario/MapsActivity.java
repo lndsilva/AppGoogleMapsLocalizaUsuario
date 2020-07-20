@@ -29,7 +29,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String[] permissoes = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION
     };
+    //Gerenciador de localização
     private LocationManager locationManager;
+    //Lista de localizações
     private LocationListener locationListener;
 
     @Override
@@ -42,6 +44,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Criando objeto para gerenciar localização do usuário
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
+        //Instânciando o listener de localizações para ser utilizado no onRequestPermission
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
@@ -67,10 +70,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        // Add a marker in Etecia and move the camera -23.7027, -46.6893
+        LatLng local = new LatLng(-23.7027,-46.6893);
+        mMap.addMarker(new MarkerOptions().position(local).title("Etec Irmã Agostina"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(local));
     }
     //Criando a janela para permissões do usuário a sua localização
 
