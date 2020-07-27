@@ -51,6 +51,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Log.d("Localização", "onLocationChanged: " + location.toString());
             }
         };
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    0, 0,
+                    locationListener
+            );
+        }
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -71,9 +80,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Etecia and move the camera -23.7027, -46.6893
-        LatLng local = new LatLng(-23.7027,-46.6893);
+        LatLng local = new LatLng(-23.7027, -46.6893);
         mMap.addMarker(new MarkerOptions().position(local).title("Etec Irmã Agostina"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(local));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(local, 15));
     }
     //Criando a janela para permissões do usuário a sua localização
 
