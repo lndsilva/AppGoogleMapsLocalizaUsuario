@@ -41,24 +41,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Validando as permissões
         Permissoes.validarPermissoes(permissoes, this, 1);
 
-        //Criando objeto para gerenciar localização do usuário
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
-        //Instânciando o listener de localizações para ser utilizado no onRequestPermission
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                Log.d("Localização", "onLocationChanged: " + location.toString());
-            }
-        };
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    0, 0,
-                    locationListener
-            );
-        }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -79,10 +61,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Etecia and move the camera -23.7027, -46.6893
-        LatLng local = new LatLng(-23.7027, -46.6893);
-        mMap.addMarker(new MarkerOptions().position(local).title("Etec Irmã Agostina"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(local, 15));
+        //Criando objeto para gerenciar localização do usuário
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        //Instânciando o listener de localizações para ser utilizado no onRequestPermission
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                Log.d("Localização", "onLocationChanged: " + location.toString());
+
+                Double latitude = location.getLatitude();
+                Double longitude = location.getLongitude();
+
+                LatLng localUsuario = new LatLng(latitude, longitude);
+                mMap.addMarker(new MarkerOptions().position(localUsuario).title("Local"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(localUsuario, 16));
+
+            }
+        };
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    0, 0,
+                    locationListener
+            );
+        }
+
+
     }
     //Criando a janela para permissões do usuário a sua localização
 
