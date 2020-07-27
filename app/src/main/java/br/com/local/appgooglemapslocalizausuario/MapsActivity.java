@@ -73,6 +73,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Double latitude = location.getLatitude();
                 Double longitude = location.getLongitude();
 
+                //limpando os marcadores para não repetir no mapa
+                mMap.clear();
+
                 LatLng localUsuario = new LatLng(latitude, longitude);
                 mMap.addMarker(new MarkerOptions().position(localUsuario).title("Local"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(localUsuario, 16));
