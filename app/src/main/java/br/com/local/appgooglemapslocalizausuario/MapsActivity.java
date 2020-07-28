@@ -46,8 +46,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         //Validando as permissões
         Permissoes.validarPermissoes(permissoes, this, 1);
-
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -67,24 +65,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onLocationChanged(@NonNull Location location) {
                 Log.d("Localização", "onLocationChanged: " + location.toString());
 
+
                 Double latitude = location.getLatitude();
                 Double longitude = location.getLongitude();
 
                 //limpando os marcadores para não repetir no mapa
                 mMap.clear();
 
-                /*
-
-                */
                 //Recupera informações do local do usuário
                 Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
 
                 try {
                     //Recupera o endereço do usuário
-                    // List<Address> listaEndereco = geocoder.getFromLocation(latitude, longitude, 1);
+                    //List<Address> listaEndereco = geocoder.getFromLocation(latitude, longitude, 1);
 
                     //Recuperar o local pelo endereço
-                    String enderecoLocal = "AV ROBERTO KENNEDY, 4695 - Interlagos, São Paulo - SP, 04772-005";
+                    String enderecoLocal = "Av. Sen. Teotônio Vilela, 261 - Interlagos, São Paulo - SP, 04801-010";
                     List<Address> listaEndereco = geocoder.getFromLocationName(enderecoLocal, 1);
 
                     //testando se realmente temos um endereço
@@ -97,13 +93,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         Double lat = endereco.getLatitude();
                         Double lon = endereco.getLongitude();
+                        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
+                        //Criando marcador com o endereço do usuário
                         LatLng localUsuario = new LatLng(lat, lon);
-                        mMap.addMarker(new MarkerOptions().position(localUsuario).title("Local"));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(localUsuario, 16));
+                        mMap.addMarker(new MarkerOptions().position(localUsuario).title("Local Usuário"));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(localUsuario, 15));
+
+                        /*
+                         * D/local: onLocationChanged:
+                         * Address[addressLines=[0:"R. Bonsucesso, 60 - Jardim Noronha, São Paulo - SP, 04853-192, Brazil"],
+                         * feature=60,
+                         * admin=São Paulo,
+                         * sub-admin=São Paulo,
+                         * locality=null,
+                         * thoroughfare=Rua Bonsucesso,
+                         * postalCode=04853-192,
+                         * countryCode=BR,
+                         * countryName=Brazil,
+                         * hasLatitude=true,
+                         * latitude=-23.7716203,
+                         * hasLongitude=true,
+                         * longitude=-46.6768499,
+                         * phone=null,
+                         * url=null,
+                         * extras=null]
+
+                         * */
 
 
                         Log.d("local", "onLocationChanged: " + endereco.toString());
+                        //txtNomeEndereco.setText(endereco.getAddressLine(0));
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -115,12 +135,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER,
-                    0, 0,
+                    1000, 10,
                     locationListener
             );
         }
-
-
     }
 
     //Criando a janela para permissões do usuário a sua localização
