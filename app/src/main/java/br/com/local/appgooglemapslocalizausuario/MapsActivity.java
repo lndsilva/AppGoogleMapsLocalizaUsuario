@@ -21,6 +21,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -33,7 +34,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     //Criando array de strings para as permissões do maps
     private String[] permissoes = new String[]{
-            Manifest.permission.ACCESS_FINE_LOCATION
+           Manifest.permission.ACCESS_FINE_LOCATION
     };
     //Gerenciador de localização
     private LocationManager locationManager;
@@ -46,7 +47,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         //Validando as permissões
         Permissoes.validarPermissoes(permissoes, this, 1);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        //obtem suporte do fragment para carregar o mapa.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -70,6 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Double longitude = location.getLongitude();
 
                 //limpando os marcadores para não repetir no mapa
+                // tente comentar essa linha e você verá que seu ponto de localização anteriror não apagará
                 mMap.clear();
 
                 //Recupera informações do local do usuário
@@ -77,11 +79,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 try {
                     //Recupera o endereço do usuário
-                    //List<Address> listaEndereco = geocoder.getFromLocation(latitude, longitude, 1);
+                    List<Address> listaEndereco = geocoder.getFromLocation(latitude, longitude, 1);
 
                     //Recuperar o local pelo endereço
-                    String enderecoLocal = "Av. Sen. Teotônio Vilela, 261 - Interlagos, São Paulo - SP, 04801-010";
-                    List<Address> listaEndereco = geocoder.getFromLocationName(enderecoLocal, 1);
+                    String enderecoLocal = "Av. Feliciano Correia, s/n - Jardim Satelite, São Paulo - SP, 04815-240";
+                    //List<Address> listaEndereco = geocoder.getFromLocationName(enderecoLocal, 1);
 
                     //testando se realmente temos um endereço
                     if (listaEndereco != null && listaEndereco.size() > 0) {
@@ -93,11 +95,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         Double lat = endereco.getLatitude();
                         Double lon = endereco.getLongitude();
-                        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
 
                         //Criando marcador com o endereço do usuário
                         LatLng localUsuario = new LatLng(lat, lon);
-                        mMap.addMarker(new MarkerOptions().position(localUsuario).title("Local Usuário"));
+
+                        mMap.addMarker(new MarkerOptions()
+                                .position(localUsuario)
+                                .title("Local atual")
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.loc))
+                        );
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(localUsuario, 15));
 
                         /*
@@ -140,6 +147,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             );
         }
     }
+
 
     //Criando a janela para permissões do usuário a sua localização
     @Override
