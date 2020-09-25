@@ -95,7 +95,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         Double lat = endereco.getLatitude();
                         Double lon = endereco.getLongitude();
-                        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
                         //Criando marcador com o endereço do usuário
                         LatLng localUsuario = new LatLng(lat, lon);
