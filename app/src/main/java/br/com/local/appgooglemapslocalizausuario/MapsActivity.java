@@ -13,6 +13,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -39,7 +40,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         //Validando as permissões
-        Permissoes.validarPermissoes(permissoes, this, 1);
+
+        Permissoes.validarPermissoes(permissoes,
+                this, 1);
 
         //Criando objeto para gerenciar localização do usuário
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -71,11 +74,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Etecia and move the camera -23.7027, -46.6893
-        LatLng local = new LatLng(-23.7027,-46.6893);
-        mMap.addMarker(new MarkerOptions().position(local).title("Etec Irmã Agostina"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(local));
+        LatLng etecia = new LatLng(-23.7027, -46.6893);
+        mMap.addMarker(new MarkerOptions().position(etecia).title("Etec Irmã Agostina"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(etecia, 15));
     }
     //Criando a janela para permissões do usuário a sua localização
+
 
 
     @Override
